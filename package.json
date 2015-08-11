@@ -1,0 +1,22 @@
+{
+  "name": "kopa-model",
+  "version": "1.0.0",
+  "description": "Client/Server side model schema definitions for kopa.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./node_modules/.bin/mocha ./**/*.test.js"
+  },
+  "keywords": [
+    "model"
+  ],
+  "author": "Ondrej Brinkel <info@anzui.de>",
+  "license": "MIT",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "filter-obj": "^1.0.0",
+    "map-obj": "^1.0.1"
+  }
+}
