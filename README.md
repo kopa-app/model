@@ -19,7 +19,7 @@ $ npm test
 ## Usage
 
 ```javascript
-var Schema = require('model');
+var Schema = require('kopa-model');
 
 function isEmail(email) {
   return (/* put your email validation in here */) ? true : 'invalid email';
