@@ -1,9 +1,11 @@
 'use strict';
 
-var Schema = require('./index')();
+var Model = require('./index');
 var expect = require('expect.js');
 
 describe('Schema', function () {
+  var Schema = Model();
+
   var User = Schema('User', {
     username: 'string',
     email: 'string',
@@ -173,5 +175,67 @@ describe('Schema', function () {
     expect(zooby.toJSON()).to.eql(data);
     expect(zooby.toString()).to.be(JSON.stringify(data));
     expect(zooby.toString(true)).to.be(JSON.stringify(data, null, 2));
+  });
+
+  it('Model Constructor and instance should emit lifecycle events', function (next) {
+    var Ooby = Schema('Ooby', {
+      name: 'string',
+      email: 'string'
+    });
+
+    var data = {
+      name: 'Foo',
+      email: 'foo@bar.com'
+    };
+
+    var eventsEmitted = 0;
+
+    function onEventEmitted() {
+      eventsEmitted++;
+
+      if (eventsEmitted === 16) {
+        next();
+      }
+    }
+
+    function onConstrEvent(model) {
+      expect(model).to.be(ooby);
+      onEventEmitted();
+    }
+
+    function onModelEvent() {
+      onEventEmitted();
+    }
+
+    Ooby.on('create', function (model) {
+      expect(model.toJSON()).to.eql(data);
+      onEventEmitted();
+    });
+    Ooby.on('beforeSave', onConstrEvent);
+    Ooby.on('save', onConstrEvent);
+    Ooby.on('beforeRemove', onConstrEvent);
+    Ooby.on('remove', onConstrEvent);
+    Ooby.on('change', onEventEmitted);
+    Ooby.on('change:name', onEventEmitted);
+
+    var ooby = Ooby(data);
+
+    ooby.on('beforeSave', onModelEvent);
+    ooby.on('save', onModelEvent);
+    ooby.on('beforeRemove', onModelEvent);
+    ooby.on('remove', onModelEvent);
+    ooby.on('change', function (name, value) {
+      expect(name).to.be('name');
+      expect(value).to.be('Bar');
+      onEventEmitted();
+    });
+    ooby.on('change:name', function (value) {
+      expect(value).to.be('Bar');
+      onEventEmitted();
+    });
+
+    ooby.name = 'Bar';
+    ooby.save();
+    ooby.remove();
   });
 });
