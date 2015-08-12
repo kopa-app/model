@@ -238,4 +238,58 @@ describe('Schema', function () {
     ooby.save();
     ooby.remove();
   });
+
+  it('should allow for custom save and remove methods', function (next) {
+    var globalCalls = 0;
+    var localCalls = 0;
+    var account, user;
+
+    function onCall(isGlobal) {
+      if (isGlobal) {
+        globalCalls++;
+      } else {
+        localCalls++;
+      }
+
+      if (globalCalls + localCalls == 4) {
+        next();
+      }
+    }
+
+    var Schema = Model({
+      save: function(model, cb) {
+        expect(model).to.be(account);
+        cb(null);
+        onCall(true);
+      },
+      remove: function(model, cb) {
+        expect(model).to.be(account);
+        cb(null);
+        onCall(true);
+      }
+    });
+
+    var Account = Schema('Account', {});
+    account = Account();
+
+    account.save();
+    account.remove();
+
+    var User = Schema('User', {}, {
+      save: function (model, cb) {
+        expect(model).to.be(user);
+        cb(null);
+        onCall();
+      },
+      remove: function (model, cb) {
+        expect(model).to.be(user);
+        cb(null);
+        onCall();
+      },
+    });
+
+    user = User();
+    user.save();
+    user.remove();
+  });
 });

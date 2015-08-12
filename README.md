@@ -21,6 +21,12 @@ $ npm test
 ```javascript
 var Schema = require('kopa-model')({
   // global options here
+  save: function (model, cb) {
+    // store your model in the backend
+  },
+  remove: function (model, cb) {
+    // remove your model from the backend
+  }
 });
 
 function isEmail(email) {
@@ -60,7 +66,8 @@ var User = Schema('User', {
     return {
       // override build in toJSON here
     };
-  }
+  },
+  // you can override 'save()' and 'remove()' here
 });
 
 // extend model instances
