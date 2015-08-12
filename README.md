@@ -2,6 +2,10 @@
 
 Tiny model schema definitions for client and server used in kopa.io
 
+This module only provides basic model schema definitions and factories without a binding to a certain framework or backend/adapter.
+
+It works in browsers and on server side.
+
 ## Install
 
 ```bash
@@ -9,6 +13,12 @@ $ npm install kopa-app/model
 ```
 
 ## Hacking
+
+Prepare for development:
+
+```bash
+$ npm install
+```
 
 Run the tests with:
 
