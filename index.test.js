@@ -342,4 +342,22 @@ describe('Schema', function () {
     expect(accountFields).to.not.have.property('updatedAt');
     expect(accountFields).to.have.property('name');
   });
+
+  it('Model.save and Model.remove should return Promise', function (next) {
+    require('es6-promise').polyfill();
+
+    var user = User();
+    var savePromise = user.save();
+    var removePromise = user.remove();
+    expect(savePromise).to.be.a(Promise);
+    expect(removePromise).to.be.a(Promise);
+
+    return savePromise
+      .then(function () {
+        return removePromise;
+      })
+      .then(function () {
+        next();
+      });
+  });
 });

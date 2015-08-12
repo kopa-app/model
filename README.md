@@ -169,6 +169,14 @@ user.toJSON();
 // returns a string represantation of the model
 // set pretty to true for prettier output
 user.toString(pretty);
+
+// save user to backend
+// returns a promise, callback can be omitted
+user.save(callback);
+
+// remove user from backend
+// returns a promise, callback can be omitted
+user.remove(callback);
 ```
 
 ### Lifecycle events
