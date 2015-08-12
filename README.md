@@ -119,3 +119,61 @@ user.getConstructor(); // returns constructor method
 user.toJSON(); // returns plain object representation of the model (usefull for JSON.stringify)
 user.toString(pretty); // returns a string represantation of the model (set pretty to true for prettier output)
 ```
+
+### Lifecycle events
+
+Model Constructors and model instances emit lifecycle events.
+
+```javascript
+User.on('create', function (model) {
+  // when a model was created
+});
+
+User.on('beforeSave', function (model) {
+  // before a model instance gets saved
+});
+
+user.on('beforeSave', function () {
+  // same as with constructor but no model instance gets passed
+});
+
+User.on('save', function (model, error) {
+  // after a model instance got saved, if an error occured it's passed as second argument
+});
+
+user.on('save', function () {
+  // same as with constructor but no model instance gets passed
+});
+
+User.on('beforeRemove', function (model) {
+  // before a model instance gets removed
+});
+
+user.on('beforeRemove', function () {
+  // same as with constructor but no model instance gets passed
+});
+
+User.on('remove', function (model, error) {
+  // after a model instance got removed, if an error occured it's passed as second argument
+});
+
+user.on('remove', function (error) {
+  // same as with constructor but no model instance gets passed
+});
+
+User.on('change', function (model, name, value) {
+  // called when property has changed
+});
+
+user.on('change', function (name, value) {
+  // same as with constructor but no model instance gets passed
+});
+
+User.on('change:username', function (model, value) {
+  // called when the username property has changed
+});
+
+user.on('change:username', function (value) {
+  // same as with constructor but no model instance gets passed
+});
+```
