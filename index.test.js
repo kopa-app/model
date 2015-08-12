@@ -292,4 +292,42 @@ describe('Schema', function () {
     user.save();
     user.remove();
   });
+
+  it('should allow default fields', function () {
+    var Schema = Model({
+      fields: {
+        createdAt: {
+          type: 'date',
+          default: function () {
+            return new Date();
+          }
+        },
+        updatedAt: 'date'
+      }
+    });
+
+    var User = Schema('User', {
+      username: 'string',
+      email: 'string'
+    });
+
+    var fields = User.getFields();
+    expect(fields).to.have.property('createdAt');
+    expect(fields).to.have.property('updatedAt');
+    expect(fields).to.have.property('username');
+    expect(fields).to.have.property('email');
+
+    var now = new Date();
+    var user = User();
+    expect(user.createdAt).to.be.a(Date);
+    expect(user.createdAt >= now).to.be(true);
+
+    // should not assign default if field was already asigned in constructor
+    var user2 = User({
+      createdAt: new Date(5000)
+    });
+
+    expect(user2.createdAt).to.be.a(Date);
+    expect(user2.createdAt.getTime()).to.be(5000);
+  });
 });

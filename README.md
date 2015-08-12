@@ -36,6 +36,14 @@ var Schema = require('kopa-model')({
   },
   remove: function (model, cb) {
     // remove your model from the backend
+  },
+  fields: {
+    createdAt: {
+      type: 'date',
+      default: function () {
+        return new Date();
+      }
+    }
   }
 });
 
