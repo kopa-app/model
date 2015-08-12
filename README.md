@@ -81,6 +81,7 @@ var User = Schema('User', {
     },
     set: noop
   },
+
   // remove default fields, by assigning them a falsy value
   updatedAt: false
 }, {
@@ -125,22 +126,49 @@ User.getModelName(); // returns model schema name
 ### Model instance methods
 
 ```javascript
-user.hasErrors(); // check if model has validation errors
-user.getErrors(); // returns validation errors (keys are field names, values the error messages)
-user.getFieldErrors(name); // returns errors for a field
-user.setFieldErrors(name, errors); // set errors for a field
-user.clearErrors(); // removes any validation errors
+// check if model has validation errors
+user.hasErrors();
 
-user.getProperty(name); // returns raw property (no getters)
-user.setProperty(name, value); // sets raw property (no setters and validation)
-user.setProperties(props); // like setProperty() but for multiple values
-user.getProperties(); // returns raw properties (without getters)
+// returns validation errors (keys are field names, values the error messages)
+user.getErrors();
 
-user.getFields(); // returns field definitions
-user.getModelName(); // returns model schema name
-user.getConstructor(); // returns constructor method
-user.toJSON(); // returns plain object representation of the model (usefull for JSON.stringify)
-user.toString(pretty); // returns a string represantation of the model (set pretty to true for prettier output)
+// returns errors for a field
+user.getFieldErrors(name);
+
+// set errors for a field
+user.setFieldErrors(name, errors);
+
+// removes any validation errors
+user.clearErrors();
+
+// returns raw property (no getters)
+user.getProperty(name);
+
+// sets raw property (no setters and validation)
+user.setProperty(name, value);
+
+// like setProperty() but for multiple values
+user.setProperties(props);
+
+// returns raw properties (without getters)
+user.getProperties();
+
+// returns field definitions
+user.getFields();
+
+// returns model schema name
+user.getModelName();
+
+// returns constructor method
+user.getConstructor();
+
+// returns plain object representation of the model
+// usefull for JSON.stringify
+user.toJSON();
+
+// returns a string represantation of the model
+// set pretty to true for prettier output
+user.toString(pretty);
 ```
 
 ### Lifecycle events
@@ -157,15 +185,18 @@ User.on('beforeSave', function (model) {
 });
 
 user.on('beforeSave', function () {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 
 User.on('save', function (model, error) {
-  // after a model instance got saved, if an error occured it's passed as second argument
+  // after a model instance got saved,
+  // if an error occured it's passed as second argument
 });
 
 user.on('save', function () {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 
 User.on('beforeRemove', function (model) {
@@ -173,15 +204,18 @@ User.on('beforeRemove', function (model) {
 });
 
 user.on('beforeRemove', function () {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 
 User.on('remove', function (model, error) {
-  // after a model instance got removed, if an error occured it's passed as second argument
+  // after a model instance got removed,
+  // if an error occured it's passed as second argument
 });
 
 user.on('remove', function (error) {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 
 User.on('change', function (model, name, value) {
@@ -189,7 +223,8 @@ User.on('change', function (model, name, value) {
 });
 
 user.on('change', function (name, value) {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 
 User.on('change:username', function (model, value) {
@@ -197,6 +232,7 @@ User.on('change:username', function (model, value) {
 });
 
 user.on('change:username', function (value) {
-  // same as with constructor but no model instance gets passed
+  // same as with constructor
+  // but no model instance gets passed
 });
 ```
