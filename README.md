@@ -19,7 +19,9 @@ $ npm test
 ## Usage
 
 ```javascript
-var Schema = require('kopa-model');
+var Schema = require('kopa-model')({
+  // global options here
+});
 
 function isEmail(email) {
   return (/* put your email validation in here */) ? true : 'invalid email';
@@ -51,6 +53,13 @@ var User = Schema('User', {
       return model.firstname + ' ' + model.lastname;
     },
     set: noop
+  }
+}, {
+  // additional options here
+  toJSON: function (model) {
+    return {
+      // override build in toJSON here
+    };
   }
 });
 
@@ -101,4 +110,5 @@ user.getFields(); // returns field definitions
 user.getModelName(); // returns model schema name
 user.getConstructor(); // returns constructor method
 user.toJSON(); // returns plain object representation of the model (usefull for JSON.stringify)
+user.toString(pretty); // returns a string represantation of the model (set pretty to true for prettier output)
 ```

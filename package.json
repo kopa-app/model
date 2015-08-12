@@ -16,6 +16,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
+    "events": "^1.0.2",
     "filter-obj": "^1.0.0",
     "map-obj": "^1.0.1"
   }

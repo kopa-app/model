@@ -1,6 +1,6 @@
 'use strict';
 
-var Schema = require('./index');
+var Schema = require('./index')();
 var expect = require('expect.js');
 
 describe('Schema', function () {
@@ -17,6 +17,7 @@ describe('Schema', function () {
     expect(User.getModelName()).to.be('User');
     var user = User();
     expect(user.getModelName()).to.be('User');
+    expect(Schema.get('User')).to.be(User);
   });
 
   it('should normalize fields', function () {
@@ -154,5 +155,23 @@ describe('Schema', function () {
       email: ['invalid isEmail'],
       roles: ['invalid array value']
     });
+  });
+
+  it('should serialize to JSON and string', function () {
+    var Zooby = Schema('Zooby', {
+      name: 'string',
+      email: 'string'
+    });
+
+    var data = {
+      name: 'Foo',
+      email: 'foo@bar.com'
+    };
+
+    var zooby = Zooby(data);
+
+    expect(zooby.toJSON()).to.eql(data);
+    expect(zooby.toString()).to.be(JSON.stringify(data));
+    expect(zooby.toString(true)).to.be(JSON.stringify(data, null, 2));
   });
 });
