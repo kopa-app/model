@@ -37,13 +37,16 @@ var Schema = require('kopa-model')({
   remove: function (model, cb) {
     // remove your model from the backend
   },
+  // default fields, that will be mixed into every model type
   fields: {
     createdAt: {
       type: 'date',
+      // use a default function/value to create an initial value
       default: function () {
         return new Date();
       }
-    }
+    },
+    updatedAt: 'date'
   }
 });
 
@@ -77,7 +80,9 @@ var User = Schema('User', {
       return model.firstname + ' ' + model.lastname;
     },
     set: noop
-  }
+  },
+  // remove default fields, by assigning them a falsy value
+  updatedAt: false
 }, {
   // additional options here
   toJSON: function (model) {

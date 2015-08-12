@@ -329,5 +329,17 @@ describe('Schema', function () {
 
     expect(user2.createdAt).to.be.a(Date);
     expect(user2.createdAt.getTime()).to.be(5000);
+
+    // should remove fields with falsy config
+    var Account = Schema('Account', {
+      createdAt: null,
+      updatedAt: false,
+      name: 'string'
+    });
+
+    var accountFields = Account.getFields();
+    expect(accountFields).to.not.have.property('createdAt');
+    expect(accountFields).to.not.have.property('updatedAt');
+    expect(accountFields).to.have.property('name');
   });
 });
