@@ -360,4 +360,24 @@ describe('Schema', function () {
         next();
       });
   });
+
+  it('should allow passing extension in options', function () {
+    var Schema = Model({
+      extend: {
+        foo: function () {
+          return 'bar';
+        },
+        bar: function () {
+          return 'foo';
+        }
+      }
+    });
+
+    var User = Schema('User', {});
+    var user = User();
+    expect(user.foo).to.be.a('function');
+    expect(user.bar).to.be.a('function');
+    expect(user.foo()).to.be('bar');
+    expect(user.bar()).to.be('foo');
+  });
 });
