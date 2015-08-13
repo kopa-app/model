@@ -361,6 +361,38 @@ describe('Schema', function () {
       });
   });
 
+  it('Model.save and Model.remove should detect promises', function (next) {
+    require('es6-promise').polyfill();
+
+    var Schema = Model({
+      save: function(model) {
+        return new Promise(function (resolve, reject) {
+          resolve();
+        });
+      },
+      remove: function(model) {
+        return new Promise(function (resolve, reject) {
+          resolve();
+        });
+      }
+    });
+
+    var User = Schema('User', {});
+    var user = User();
+
+    User.on('save', function (model) {
+      expect(model).to.be(user);
+      user.remove();
+    });
+
+    User.on('remove', function (model) {
+      expect(model).to.be(user);
+      next();
+    });
+
+    user.save();
+  });
+
   it('should allow passing extension in options', function () {
     var Schema = Model({
       extend: {
@@ -379,5 +411,66 @@ describe('Schema', function () {
     expect(user.bar).to.be.a('function');
     expect(user.foo()).to.be('bar');
     expect(user.bar()).to.be('foo');
+  });
+
+  it('should allow load and count methods on Model Constructor', function (next) {
+    var called = 0;
+
+    var q = {
+      foo: 'bar'
+    };
+
+    var Schema = Model({
+      load: function(query, cb) {
+        expect(query).to.be(q);
+        called++;
+      },
+      count: function(query, cb) {
+        expect(query).to.be(q);
+        called++;
+
+        if (called == 2) {
+          next();
+        }
+      }
+    });
+
+    var User = Schema('User', {});
+
+    User.load(q);
+    User.count(q);
+  });
+
+  it('shoudl detect promises in load and count methods', function (next) {
+    var called = 0;
+
+    var q = {
+      foo: 'bar'
+    };
+
+    var Schema = Model({
+      load: function(query, cb) {
+        expect(query).to.be(q);
+        return new Promise(function (resolve, reject) {
+          resolve();
+          called++;
+        });
+      },
+      count: function(query, cb) {
+        expect(query).to.be(q);
+        return new Promise(function (resolve, reject) {
+          resolve();
+          called++;
+          if (called == 2) {
+            next();
+          }
+        });
+      }
+    });
+
+    var User = Schema('User', {});
+
+    User.load(q);
+    User.count(q)
   });
 });
