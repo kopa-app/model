@@ -52,10 +52,10 @@ var Schema = Model({
   remove: function (model, callback) {
     // remove your model from the backend
   },
-  load: function (query, callback) {
+  load: function (modelName, query, callback) {
     // load your models from the backend
   },
-  count: function (query, callback) {
+  count: function (modelName, query, callback) {
     // count your models from the backend
   },
   // default fields, that will be mixed into every model type
