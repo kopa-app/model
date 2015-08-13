@@ -197,17 +197,34 @@ user.setFieldErrors(name, errors);
 // removes any validation errors
 user.clearErrors();
 
-// returns raw property (no getters)
-user.getProperty(name);
+// gets a property
+// same as user.username
+user.get('username');
+
+// returns all properties
+user.get();
+
+// sets a property
+// same as user.username = 'dooby'
+user.set('username', 'dooby');
+
+// sets multiple properties at once
+user.set({
+  username: 'dooby',
+  email: 'foo@bar.com'
+});
+
+// returns raw property or all properties (no getters)
+user.getRaw('username');
 
 // sets raw property (no setters and validation)
-user.setProperty(name, value);
+user.setRaw('username', 'dooby');
 
-// like setProperty() but for multiple values
-user.setProperties(props);
-
-// returns raw properties (without getters)
-user.getProperties();
+// sets multiple raw properties (no setters and validation)
+user.setRaw({
+  username: 'dooby',
+  email: 'foo@bar.com'
+});
 
 // returns field definitions
 user.getFields();
@@ -215,8 +232,8 @@ user.getFields();
 // returns model schema name
 user.getModelName();
 
-// returns constructor method
-user.getConstructor();
+// returns factory method
+user.getFactory();
 
 // returns plain object representation of the model
 // usefull for JSON.stringify
