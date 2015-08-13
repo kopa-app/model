@@ -4,7 +4,7 @@
   "description": "Client/Server side model schema definitions for kopa.io",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/.bin/mocha ./**/*.test.js"
+    "test": "node ./node_modules/.bin/mocha ./lib/**/*.test.js"
   },
   "keywords": [
     "model",
