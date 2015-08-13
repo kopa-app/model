@@ -28,14 +28,35 @@ $ npm test
 
 ## Usage
 
+### Create a Schema
+
+Schemas can create model factories.
+
+You can think of a Schema like a link to a database/your backend.
+
+By passing it `save`, `remove`, `load` and `count` methods you can basically create an adapter for all models defined in this schema.
+All these methods can return promises instead of using the passed in callback.
+
+
+By passing it a `fields` object you can also define default fields, that will exist in every defined model within that Schema.
+
 ```javascript
-var Schema = require('kopa-model')({
+var Model = require('kopa-model');
+
+// var Schema = Model(options);
+var Schema = Model({
   // global options here
-  save: function (model, cb) {
+  save: function (model, callback) {
     // store your model in the backend
   },
-  remove: function (model, cb) {
+  remove: function (model, callback) {
     // remove your model from the backend
+  },
+  load: function (query, callback) {
+    // load your models from the backend
+  },
+  count: function (query, callback) {
+    // count your models from the backend
   },
   // default fields, that will be mixed into every model type
   fields: {
@@ -49,14 +70,29 @@ var Schema = require('kopa-model')({
     updatedAt: 'date'
   }
 });
+```
 
+### Define a model
+
+After you've create your Schema, you can define Models on it.
+
+The Schema returns a model factory for each model you define.
+
+You can override anything you've passed to the Schema's options.
+
+The model factory itself can extend every model instance at runtime using it's `extend` method.
+
+```javascript
 function isEmail(email) {
-  return (/* put your email validation in here */) ? true : 'invalid email';
+  return (/* put your email validation in here */) ?
+    true : 'invalid email';
 }
 
 function noop() {}
 
-// define a model schema
+// define a model
+// Schema(modelName, fields, options);
+
 var User = Schema('User', {
   username: {
     type: 'string',
@@ -91,7 +127,7 @@ var User = Schema('User', {
       // override build in toJSON here
     };
   },
-  // you can override 'save()' and 'remove()' here
+  // you can override anything you've passed to Model() before here too
 });
 
 // extend model instances
@@ -99,7 +135,13 @@ var User = Schema('User', {
 User.extend('greet', function (model) {
   return "Hi, I'm " + model.fullname + ".";
 });
+```
 
+### Creating model instances
+
+Model instances are created by calling the factory created by our `Schema`.
+
+```javascript
 // create a model instance
 var peter = User({
   username: 'peter.parker',
@@ -109,18 +151,32 @@ var peter = User({
   createdAt: new Date()
 });
 
+// remember we extended User before with a greet method
 peter.greet(); // Hi, I'm Peter Parker.
 
 // set properties
 peter.lastname = 'Smith';
-peter.createdAt = new Date(50000); // will not update createdAt, as it's immutable
+
+// will not update createdAt, as it's immutable
+peter.createdAt = new Date(50000);
 ```
 
-### Model Constructor methods
+### Model factory methods
 
 ```javascript
-User.getFields(); // returns field definitions
-User.getModelName(); // returns model schema name
+// returns field definitions
+User.getFields();
+
+// returns model schema name
+User.getModelName();
+
+// calls your own load implementation
+// returns a promise, callback can be omitted
+User.load(query, callback);
+
+// calls your own count implementation
+// returns a promise, callback can be omitted
+User.cont(query, callback);
 ```
 
 ### Model instance methods
@@ -170,11 +226,11 @@ user.toJSON();
 // set pretty to true for prettier output
 user.toString(pretty);
 
-// save user to backend
+// calls your own save implementation
 // returns a promise, callback can be omitted
 user.save(callback);
 
-// remove user from backend
+// calls your own remove implementation
 // returns a promise, callback can be omitted
 user.remove(callback);
 ```
