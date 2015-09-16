@@ -176,7 +176,7 @@ User.load(query, callback);
 
 // calls your own count implementation
 // returns a promise, callback can be omitted
-User.cont(query, callback);
+User.count(query, callback);
 ```
 
 ### Model instance methods
