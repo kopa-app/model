@@ -1,0 +1,2 @@
+image: node:0.12
+script: npm test
