@@ -118,6 +118,17 @@ var User = Schema('User', {
     set: noop
   },
 
+  // serializers
+  confirmedAt: {
+    type: 'datetime',
+    serialize: function (value) {
+      return new Date(value);
+    },
+    unserialize: function (value) {
+      return value.toJSONString();
+    }
+  },
+
   // remove default fields, by assigning them a falsy value
   updatedAt: false
 }, {
